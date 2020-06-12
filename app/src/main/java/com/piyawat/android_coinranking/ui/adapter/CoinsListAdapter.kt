@@ -14,6 +14,8 @@ import com.piyawat.android_coinranking.model.Coin
 class CoinsListAdapter(private val listCoins: List<Coin>) :
     RecyclerView.Adapter<BaseViewHolder<*>>() {
 
+    private val items = listCoins.toMutableList()
+
     companion object {
         private const val VIEW_DIFF = 0
         private const val VIEW_NORMAL = 1
@@ -48,20 +50,26 @@ class CoinsListAdapter(private val listCoins: List<Coin>) :
         }
     }
 
+    fun updateData(data: List<Coin>, isNew : Boolean) {
+        if(isNew) items.clear()
+        items.addAll(data.toMutableList())
+        notifyDataSetChanged()
+    }
+
     override fun getItemCount(): Int {
-        return listCoins.size
+        return items.size
     }
 
     override fun getItemViewType(position: Int): Int {
-        if (position % 5 == 0)
+        if ((position+1) % 5 == 0)
             return VIEW_DIFF
         return VIEW_NORMAL
     }
 
     override fun onBindViewHolder(holder: BaseViewHolder<*>, position: Int) {
         when(holder){
-            is NormalViewHolder -> holder.listCurrencyItemBinding.coinItem = listCoins[position]
-            is DiffViewHolder -> holder.listCurrencyItemDiffBinding.coinItem = listCoins[position]
+            is NormalViewHolder -> holder.listCurrencyItemBinding.coinItem = items[position]
+            is DiffViewHolder -> holder.listCurrencyItemDiffBinding.coinItem = items[position]
         }
     }
 

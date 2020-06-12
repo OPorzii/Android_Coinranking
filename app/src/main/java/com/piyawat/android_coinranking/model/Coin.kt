@@ -11,7 +11,7 @@ data class Coin(
     @SerializedName("change")
     val change: Double,
     @SerializedName("circulatingSupply")
-    val circulatingSupply: Int,
+    val circulatingSupply: Double,
     @SerializedName("color")
     val color: String,
     @SerializedName("confirmedSupply")
@@ -51,7 +51,7 @@ data class Coin(
     @SerializedName("symbol")
     val symbol: String,
     @SerializedName("totalSupply")
-    val totalSupply: Int,
+    val totalSupply: Double,
     @SerializedName("type")
     val type: String,
     @SerializedName("uuid")
@@ -61,3 +61,7 @@ data class Coin(
     @SerializedName("websiteUrl")
     val websiteUrl: String
 )
+{
+    val descriptionText : String?
+        get() = description.replace("\\<.*?>".toRegex(), "")
+}

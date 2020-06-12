@@ -21,7 +21,7 @@
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_marginEnd="16dp"
-            android:background="#8F8F8F" />
+            app:imageSvgUrl="@{coinItem.iconUrl}" />
 
 
         <LinearLayout
@@ -38,6 +38,7 @@
                 android:layout_marginBottom="8dp"
                 android:textColor="#000000"
                 android:textSize="16sp"
+                android:text="@{coinItem.name}"
                 android:textStyle="bold"
                 tools:text="Bitcoin" />
 
@@ -47,6 +48,7 @@
                 android:layout_height="wrap_content"
                 android:ellipsize="end"
                 android:lineHeight="16sp"
+                android:text="@{coinItem.descriptionText}"
                 android:maxLines="3"
                 android:textColor="#9E9E9E"
                 android:textSize="14sp"

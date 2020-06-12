@@ -10,12 +10,12 @@ import retrofit2.http.GET
 import retrofit2.http.Query
 
 
-const val BASE_URL = "https://pokeapi.co/api/v1/"
+const val BASE_URL = "https://api.coinranking.com/v1/public/"
 
 interface ApiService {
 
     @GET("coins")
-    fun getPokemonList(@Query("offset") offset : Int, @Query("limit") limit : Int): Deferred<Response<CoinsResponse>>
+    fun getCoinsList(@Query("offset") offset : Int, @Query("limit") limit : Int): Deferred<Response<CoinsResponse>>
 
     companion object {
         val instance: ApiService by lazy {

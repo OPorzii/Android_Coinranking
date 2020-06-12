@@ -48,7 +48,7 @@
                 android:layout_height="wrap_content"
                 android:ellipsize="end"
                 android:lineHeight="16sp"
-                android:text="@{coinItem.descriptionText}"
+                android:text='@{coinItem.description.replaceAll("\\&lt;.*?&gt;","")}'
                 android:maxLines="3"
                 android:textColor="#9E9E9E"
                 android:textSize="14sp"

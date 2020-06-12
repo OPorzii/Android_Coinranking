@@ -61,7 +61,3 @@ data class Coin(
     @SerializedName("websiteUrl")
     val websiteUrl: String
 )
-{
-    val descriptionText : String?
-        get() = description.replace("\\<.*?>".toRegex(), "")
-}

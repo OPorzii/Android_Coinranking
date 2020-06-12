@@ -15,19 +15,22 @@
             android:layout_height="match_parent"
             tools:context=".ui.CoinsListActivity">
 
-
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/coins_list_view"
+                <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+                    android:id="@+id/swipe_layout"
                     android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:clipToPadding="false"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    tools:listitem="@layout/list_currency_item"/>
+                    android:layout_height="match_parent">
 
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/coins_list_view"
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:clipToPadding="false"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            tools:listitem="@layout/list_currency_item"/>
 
+                </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

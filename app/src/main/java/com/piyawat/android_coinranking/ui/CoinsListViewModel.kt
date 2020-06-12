@@ -23,7 +23,7 @@ class CoinsListViewModel : ViewModel(){
 
 
 
-    fun getCoins(offset : Int, limit : Int){
+    fun fetchCoinsList(offset : Int, limit : Int){
         job = Coroutines.ioThenMain({
             repository.getCoins(offset, limit)
         }, {

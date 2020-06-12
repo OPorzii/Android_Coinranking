@@ -9,6 +9,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.piyawat.android_coinranking.R
 import com.piyawat.android_coinranking.databinding.ActivityCoinsListBinding
 import com.piyawat.android_coinranking.ui.adapter.CoinsListAdapter
@@ -18,6 +19,10 @@ class CoinsListActivity : AppCompatActivity() {
 
     private lateinit var viewModel: CoinsListViewModel
     private var adapter = CoinsListAdapter(listOf())
+    private lateinit var layoutManager : LinearLayoutManager
+    private var isLoadMore = false
+    private var page = 1
+    private val limit = 10
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -28,25 +33,59 @@ class CoinsListActivity : AppCompatActivity() {
         binding.lifecycleOwner = this
         binding.viewModel = viewModel
 
+        setupUI()
+        setupListener()
+        setupObserver()
+
+        viewModel.fetchCoinsList(0, 10)
+
+
+
+
+    }
+
+    private fun setupUI(){
         val itemDecorator = DividerItemDecoration(this, DividerItemDecoration.VERTICAL)
         itemDecorator.setDrawable(ContextCompat.getDrawable(this, R.drawable.divider)!!)
         coins_list_view.addItemDecoration(itemDecorator)
-        coins_list_view.layoutManager = LinearLayoutManager(this)
+        layoutManager = LinearLayoutManager(this)
+        coins_list_view.layoutManager = layoutManager
         coins_list_view.setHasFixedSize(true)
         coins_list_view.adapter = adapter
+    }
 
+    private fun setupListener(){
+        swipe_layout.setOnRefreshListener {
+            page = 1
+            viewModel.fetchCoinsList(0, limit)
+            swipe_layout.isRefreshing = false
+        }
 
+        coins_list_view.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                if (dy > 0) {
+                    val visibleItemCount = layoutManager.childCount
+                    val pastVisibleItem = layoutManager.findFirstCompletelyVisibleItemPosition()
+                    val total = adapter.itemCount
+                    if (!isLoadMore) {
+                        if ((visibleItemCount + pastVisibleItem) >= total) {
+                            isLoadMore = true
+                            val nextPage = ((page++) * limit)
+                            viewModel.fetchCoinsList(nextPage, limit)
+                        }
+                    }
+                    super.onScrolled(recyclerView, dx, dy)
+                }
+            }
+        })
+    }
 
-        viewModel.getCoins(0, 10)
-
+    private fun setupObserver() {
         viewModel.coinsList.observe(this, Observer {
             if(it == null) return@Observer
-
-            adapter.updateData(it, false)
-
+            adapter.updateData(it, !isLoadMore)
+            isLoadMore = false
         })
-
-
     }
 
 

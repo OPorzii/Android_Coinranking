@@ -1,20 +1,24 @@
 package com.piyawat.android_coinranking.ui.adapter
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
+import android.widget.Filter
+import android.widget.Filterable
 import androidx.databinding.DataBindingUtil
-import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.RecyclerView
 import com.piyawat.android_coinranking.R
 import com.piyawat.android_coinranking.databinding.ListCurrencyItemBinding
 import com.piyawat.android_coinranking.databinding.ListCurrencyItemDiffBinding
 import com.piyawat.android_coinranking.model.Coin
 
-class CoinsListAdapter(private val listCoins: List<Coin>) :
-    RecyclerView.Adapter<BaseViewHolder<*>>() {
+class CoinsListAdapter :
+    RecyclerView.Adapter<BaseViewHolder<*>>(), Filterable {
 
-    private val items = listCoins.toMutableList()
+
+    private val showItems : MutableList<Coin> = ArrayList()
+    private val tempItems : MutableList<Coin> = ArrayList()
+    private val lastItems : MutableList<Coin> = ArrayList()
+
 
     companion object {
         private const val VIEW_DIFF = 0
@@ -51,13 +55,19 @@ class CoinsListAdapter(private val listCoins: List<Coin>) :
     }
 
     fun updateData(data: List<Coin>, isNew : Boolean) {
-        if(isNew) items.clear()
-        items.addAll(data.toMutableList())
+        if(isNew) showItems.clear()
+        else lastItems.addAll(showItems)
+        showItems.addAll(data.toMutableList())
         notifyDataSetChanged()
     }
 
+    fun saveFilterTempData(){
+        tempItems.clear()
+        tempItems.addAll(showItems)
+    }
+
     override fun getItemCount(): Int {
-        return items.size
+        return showItems.size
     }
 
     override fun getItemViewType(position: Int): Int {
@@ -68,8 +78,38 @@ class CoinsListAdapter(private val listCoins: List<Coin>) :
 
     override fun onBindViewHolder(holder: BaseViewHolder<*>, position: Int) {
         when(holder){
-            is NormalViewHolder -> holder.listCurrencyItemBinding.coinItem = items[position]
-            is DiffViewHolder -> holder.listCurrencyItemDiffBinding.coinItem = items[position]
+            is NormalViewHolder -> holder.listCurrencyItemBinding.coinItem = showItems[position]
+            is DiffViewHolder -> holder.listCurrencyItemDiffBinding.coinItem = showItems[position]
+        }
+    }
+
+    override fun getFilter(): Filter {
+        return object:Filter(){
+            override fun performFiltering(constraint: CharSequence?): FilterResults {
+                val textSearch = constraint.toString()
+                val resultList = ArrayList<Coin>()
+                if(textSearch.isEmpty()){
+                    resultList.addAll(lastItems)
+                    lastItems.clear()
+                    tempItems.clear()
+                } else {
+                    for(row in tempItems){
+                        if(row.name.contains(textSearch) or row.slug.contains(textSearch)
+                        or row.symbol.contains(textSearch) or row.id.toString().contains(textSearch)) {
+                            resultList.add(row)
+                        }
+                    }
+                }
+                val filterResult = Filter.FilterResults()
+                filterResult.values = resultList
+                return filterResult
+
+            }
+
+            override fun publishResults(constraint: CharSequence?, results: FilterResults?) {
+                updateData(results!!.values as List<Coin>, true)
+            }
+
         }
     }
 

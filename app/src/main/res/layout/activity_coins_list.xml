@@ -3,35 +3,67 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-        <data>
-                <import type="android.view.View" />
-                <variable
-                    name="viewModel"
-                    type="com.piyawat.android_coinranking.ui.CoinsListViewModel" />
-        </data>
+    <data>
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <import type="android.view.View" />
+
+        <variable
+            name="viewModel"
+            type="com.piyawat.android_coinranking.ui.CoinsListViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#FFF"
+        tools:context=".ui.CoinsListActivity">
+
+        <LinearLayout
+            android:id="@+id/search_frame"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            tools:context=".ui.CoinsListActivity">
+            android:layout_height="wrap_content"
+            android:paddingHorizontal="16dp"
+            android:paddingVertical="20dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
-                <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-                    android:id="@+id/swipe_layout"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+            <SearchView
+                android:id="@+id/search_input"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:background="@drawable/bg_input_rounded"
+                android:iconifiedByDefault="false"
+                android:focusable="false"
+                android:paddingStart="-4dp"
+                android:queryHint="ค้นหา"
+                app:theme="@style/SearchViewStyle" />
 
-                        <androidx.recyclerview.widget.RecyclerView
-                            android:id="@+id/coins_list_view"
-                            android:layout_width="match_parent"
-                            android:layout_height="0dp"
-                            android:clipToPadding="false"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            tools:listitem="@layout/list_currency_item"/>
+        </LinearLayout>
 
-                </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+        <View
+            android:id="@+id/head_divider"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@drawable/divider"
+            app:layout_constraintTop_toBottomOf="@id/search_frame" />
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/swipe_layout"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/head_divider">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/coins_list_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:clipToPadding="false"
+                tools:listitem="@layout/list_currency_item" />
+
+
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
 

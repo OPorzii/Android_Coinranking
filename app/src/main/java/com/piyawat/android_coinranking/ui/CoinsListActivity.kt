@@ -3,6 +3,7 @@ package com.piyawat.android_coinranking.ui
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.widget.SearchView
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
@@ -18,7 +19,8 @@ import kotlinx.android.synthetic.main.activity_coins_list.*
 class CoinsListActivity : AppCompatActivity() {
 
     private lateinit var viewModel: CoinsListViewModel
-    private var adapter = CoinsListAdapter(listOf())
+
+    private var adapter = CoinsListAdapter()
     private lateinit var layoutManager : LinearLayoutManager
     private var isLoadMore = false
     private var page = 1
@@ -37,7 +39,7 @@ class CoinsListActivity : AppCompatActivity() {
         setupListener()
         setupObserver()
 
-        viewModel.fetchCoinsList(0, 10)
+        viewModel.fetchCoinsList(0, limit)
 
 
 
@@ -58,12 +60,24 @@ class CoinsListActivity : AppCompatActivity() {
         swipe_layout.setOnRefreshListener {
             page = 1
             viewModel.fetchCoinsList(0, limit)
-            swipe_layout.isRefreshing = false
         }
+
+        search_input.setOnQueryTextListener(object : SearchView.OnQueryTextListener{
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                return false
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                if(newText?.length == 1) adapter.saveFilterTempData()
+                adapter.filter.filter(newText)
+                return false
+            }
+
+        })
 
         coins_list_view.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                if (dy > 0) {
+                if (dy > 0 && search_input.query.isEmpty()) {
                     val visibleItemCount = layoutManager.childCount
                     val pastVisibleItem = layoutManager.findFirstCompletelyVisibleItemPosition()
                     val total = adapter.itemCount
@@ -85,6 +99,11 @@ class CoinsListActivity : AppCompatActivity() {
             if(it == null) return@Observer
             adapter.updateData(it, !isLoadMore)
             isLoadMore = false
+        })
+
+        viewModel.isLoading.observe(this, Observer {
+            if(it == null) return@Observer
+            swipe_layout.isRefreshing = it
         })
     }
 

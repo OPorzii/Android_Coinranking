@@ -7,4 +7,19 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="NoActionBar" parent="Theme.AppCompat.NoActionBar">
+        <item name="android:windowLightStatusBar">true</item>
+        <item name="android:statusBarColor">#FFF</item>
+    </style>
+
+
+    <style name="SearchViewStyle" parent="Widget.AppCompat.SearchView">
+        <!-- Gets rid of the search icon when the SearchView is expanded -->
+        <item name="searchHintIcon">@null</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:editTextColor">#636363</item>
+        <item name="android:textColorHint">#9E9E9E</item>
+        <item name="android:tint">#9E9E9E</item>
+    </style>
+
 </resources>

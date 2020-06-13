@@ -20,14 +20,20 @@ class CoinsListViewModel : ViewModel(){
     val coinsList: LiveData<List<Coin>>
         get() = _coinsList
 
+    private val _isLoading = MutableLiveData<Boolean>()
+    val isLoading: LiveData<Boolean>
+        get() = _isLoading
+
 
 
 
     fun fetchCoinsList(offset : Int, limit : Int){
+        _isLoading.value = true
         job = Coroutines.ioThenMain({
             repository.getCoins(offset, limit)
         }, {
             _coinsList.value = it
+            _isLoading.value = false
         })
 
     }

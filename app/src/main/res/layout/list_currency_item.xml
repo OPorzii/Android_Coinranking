@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout  xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="coinItem"
             type="com.piyawat.android_coinranking.model.Coin" />
@@ -36,9 +37,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
+                android:ellipsize="end"
+                android:lineHeight="19sp"
+                android:maxLines="1"
+                android:text="@{coinItem.name}"
                 android:textColor="#000000"
                 android:textSize="16sp"
-                android:text="@{coinItem.name}"
                 android:textStyle="bold"
                 tools:text="Bitcoin" />
 
@@ -48,8 +52,8 @@
                 android:layout_height="wrap_content"
                 android:ellipsize="end"
                 android:lineHeight="16sp"
-                android:text='@{coinItem.description.replaceAll("\\&lt;.*?&gt;","")}'
                 android:maxLines="3"
+                android:text='@{coinItem.description.replaceAll("\\&lt;.*?&gt;","")}'
                 android:textColor="#9E9E9E"
                 android:textSize="14sp"
                 tools:text="Bitcoin is the first decentralized digital currency that can be sent through the internet globally without using financial" />

@@ -39,11 +39,8 @@ class CoinsListActivity : AppCompatActivity() {
         setupListener()
         setupObserver()
 
+        // fetch first data set
         viewModel.fetchCoinsList(0, limit)
-
-
-
-
     }
 
     private fun setupUI(){
@@ -107,6 +104,14 @@ class CoinsListActivity : AppCompatActivity() {
         })
     }
 
+    override fun onBackPressed() {
+        if(layoutManager.findFirstCompletelyVisibleItemPosition()==0){
+            super.onBackPressed()
+        } else {
+            coins_list_view.smoothScrollToPosition(0)
+        }
+
+    }
 
 
 }

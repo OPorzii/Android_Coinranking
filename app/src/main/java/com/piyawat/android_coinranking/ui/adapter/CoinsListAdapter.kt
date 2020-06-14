@@ -14,17 +14,14 @@ import com.piyawat.android_coinranking.model.Coin
 class CoinsListAdapter :
     RecyclerView.Adapter<BaseViewHolder<*>>(), Filterable {
 
-
     private val showItems : MutableList<Coin> = ArrayList()
+    private val filterItems : MutableList<Coin> = ArrayList()
     private val tempItems : MutableList<Coin> = ArrayList()
-    private val lastItems : MutableList<Coin> = ArrayList()
-
 
     companion object {
         private const val VIEW_DIFF = 0
         private const val VIEW_NORMAL = 1
     }
-
 
     inner class NormalViewHolder(val listCurrencyItemBinding : ListCurrencyItemBinding) :
         BaseViewHolder<ListCurrencyItemBinding>(listCurrencyItemBinding.root)
@@ -56,14 +53,16 @@ class CoinsListAdapter :
 
     fun updateData(data: List<Coin>, isNew : Boolean) {
         if(isNew) showItems.clear()
-        else lastItems.addAll(showItems)
         showItems.addAll(data.toMutableList())
+        tempItems.clear()
+        tempItems.addAll(showItems)
         notifyDataSetChanged()
     }
 
     fun saveFilterTempData(){
-        tempItems.clear()
-        tempItems.addAll(showItems)
+        if(filterItems.size > showItems.size) return
+        filterItems.clear()
+        filterItems.addAll(showItems)
     }
 
     override fun getItemCount(): Int {
@@ -86,14 +85,12 @@ class CoinsListAdapter :
     override fun getFilter(): Filter {
         return object:Filter(){
             override fun performFiltering(constraint: CharSequence?): FilterResults {
-                val textSearch = constraint.toString()
+                val textSearch = constraint.toString().toLowerCase()
                 val resultList = ArrayList<Coin>()
                 if(textSearch.isEmpty()){
-                    resultList.addAll(lastItems)
-                    lastItems.clear()
-                    tempItems.clear()
+                    resultList.addAll(tempItems)
                 } else {
-                    for(row in tempItems){
+                    for(row in filterItems){
                         if(row.name.contains(textSearch) or row.slug.contains(textSearch)
                         or row.symbol.contains(textSearch) or row.id.toString().contains(textSearch)) {
                             resultList.add(row)
@@ -103,11 +100,12 @@ class CoinsListAdapter :
                 val filterResult = Filter.FilterResults()
                 filterResult.values = resultList
                 return filterResult
-
             }
 
             override fun publishResults(constraint: CharSequence?, results: FilterResults?) {
-                updateData(results!!.values as List<Coin>, true)
+                showItems.clear()
+                showItems.addAll(results!!.values as List<Coin>)
+                notifyDataSetChanged()
             }
 
         }

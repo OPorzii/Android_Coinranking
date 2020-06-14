@@ -27,6 +27,5 @@ interface ApiService {
 
             retrofit.create(ApiService::class.java)
         }
-
     }
 }

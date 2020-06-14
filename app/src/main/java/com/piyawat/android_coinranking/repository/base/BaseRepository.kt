@@ -15,7 +15,6 @@ abstract class BaseRepository {
             )
         }
     }
-
 }
 
 class ApiException(message: String): IOException(message)

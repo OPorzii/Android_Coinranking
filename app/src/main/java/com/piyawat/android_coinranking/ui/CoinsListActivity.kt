@@ -1,9 +1,8 @@
 package com.piyawat.android_coinranking.ui
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.widget.SearchView
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
@@ -19,13 +18,11 @@ import kotlinx.android.synthetic.main.activity_coins_list.*
 class CoinsListActivity : AppCompatActivity() {
 
     private lateinit var viewModel: CoinsListViewModel
-
     private var adapter = CoinsListAdapter()
     private lateinit var layoutManager : LinearLayoutManager
     private var isLoadMore = false
     private var page = 1
     private val limit = 10
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

@@ -1,6 +1,5 @@
 package com.piyawat.android_coinranking.ui
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -15,7 +14,6 @@ class CoinsListViewModel : ViewModel(){
     private lateinit var job: Job
     private val repository = CoinsRepository(ApiService.instance)
 
-
     private val _coinsList = MutableLiveData<List<Coin>>()
     val coinsList: LiveData<List<Coin>>
         get() = _coinsList
@@ -23,9 +21,6 @@ class CoinsListViewModel : ViewModel(){
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean>
         get() = _isLoading
-
-
-
 
     fun fetchCoinsList(offset : Int, limit : Int){
         _isLoading.value = true
@@ -37,7 +32,6 @@ class CoinsListViewModel : ViewModel(){
         })
 
     }
-
 
     override fun onCleared() {
         super.onCleared()

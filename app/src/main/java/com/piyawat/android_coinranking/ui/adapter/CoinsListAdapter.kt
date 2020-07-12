@@ -1,13 +1,12 @@
 package com.piyawat.android_coinranking.ui.adapter
 
 import android.view.ViewGroup
-import android.widget.Filterable
-import androidx.paging.PagedListAdapter
+import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.piyawat.android_coinranking.model.Coin
 
-class CoinsListAdapter : PagedListAdapter<Coin, RecyclerView.ViewHolder>(REPO_COMPARATOR) {
+class CoinsListAdapter : PagingDataAdapter<Coin, RecyclerView.ViewHolder>(REPO_COMPARATOR) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): androidx.recyclerview.widget.RecyclerView.ViewHolder {
         return CoinViewHolder.create(parent)

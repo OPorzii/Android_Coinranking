@@ -14,18 +14,21 @@ import com.piyawat.android_coinranking.R
 import com.piyawat.android_coinranking.databinding.ActivityCoinsListBinding
 import com.piyawat.android_coinranking.ui.adapter.CoinsListAdapter
 import kotlinx.android.synthetic.main.activity_coins_list.*
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
+@ExperimentalCoroutinesApi
 class CoinsListActivity : AppCompatActivity() {
 
     private lateinit var viewModel: CoinsListViewModel
     private lateinit var binding: ActivityCoinsListBinding
     private var adapter = CoinsListAdapter()
     private var fetchJob: Job? = null
+
+
     private lateinit var layoutManager : LinearLayoutManager
-
-
     private var isLoadMore = false
     private var page = 1
     private val limit = 10
@@ -40,7 +43,7 @@ class CoinsListActivity : AppCompatActivity() {
         viewModel = ViewModelProvider(this).get(CoinsListViewModel::class.java)
 
         setupUI()
-        setupListener()
+//        setupListener()
 //        setupObserver()
 
         // fetch first data set
@@ -51,7 +54,9 @@ class CoinsListActivity : AppCompatActivity() {
     private fun fetchCoinData() {
         fetchJob?.cancel()
         fetchJob = lifecycleScope.launch {
-            viewModel.fetchCoinsList().
+            viewModel.fetchCoinsList()?.collectLatest {
+                adapter.submitData(it)
+            }
         }
     }
 
@@ -66,7 +71,7 @@ class CoinsListActivity : AppCompatActivity() {
         binding.coinsListView.adapter = adapter
     }
 
-    private fun setupListener(){
+//    private fun setupListener(){
 
 
 //        search_input.setOnQueryTextListener(object : SearchView.OnQueryTextListener{
@@ -82,24 +87,24 @@ class CoinsListActivity : AppCompatActivity() {
 //
 //        })
 
-        coins_list_view.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                if (dy > 0 && search_input.query.isEmpty()) {
-                    val visibleItemCount = layoutManager.childCount
-                    val pastVisibleItem = layoutManager.findFirstCompletelyVisibleItemPosition()
-                    val total = adapter.itemCount
-                    if (!isLoadMore) {
-                        if ((visibleItemCount + pastVisibleItem) >= total) {
-                            isLoadMore = true
-                            val nextPage = ((page++) * limit)
-                            viewModel.fetchCoinsList(nextPage, limit)
-                        }
-                    }
-                    super.onScrolled(recyclerView, dx, dy)
-                }
-            }
-        })
-    }
+//        coins_list_view.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+//            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+//                if (dy > 0 && search_input.query.isEmpty()) {
+//                    val visibleItemCount = layoutManager.childCount
+//                    val pastVisibleItem = layoutManager.findFirstCompletelyVisibleItemPosition()
+//                    val total = adapter.itemCount
+//                    if (!isLoadMore) {
+//                        if ((visibleItemCount + pastVisibleItem) >= total) {
+//                            isLoadMore = true
+//                            val nextPage = ((page++) * limit)
+//                            viewModel.fetchCoinsList(nextPage, limit)
+//                        }
+//                    }
+//                    super.onScrolled(recyclerView, dx, dy)
+//                }
+//            }
+//        })
+//    }
 
 //    private fun setupObserver() {
 //        viewModel.coinsList.observe(this, Observer {
@@ -118,7 +123,7 @@ class CoinsListActivity : AppCompatActivity() {
         if(layoutManager.findFirstCompletelyVisibleItemPosition()==0){
             super.onBackPressed()
         } else {
-            coins_list_view.smoothScrollToPosition(0)
+            binding.coinsListView.smoothScrollToPosition(0)
         }
 
     }

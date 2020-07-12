@@ -1,6 +1,8 @@
 package com.piyawat.android_coinranking.repository
 
 import androidx.paging.PagedList
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import com.piyawat.android_coinranking.model.Coin
 import com.piyawat.android_coinranking.repository.base.BaseRepository
@@ -9,8 +11,16 @@ import kotlinx.coroutines.flow.Flow
 
 class CoinsRepository(private val api : ApiService) : BaseRepository() {
 
-    suspend fun getCoins(offset : Int, limit : Int) : Flow<PagingData<Coin>> {
-        val response = safeApiRequest { api.getCoinsList(offset, limit).await() }
-        return response.data.coins
+    suspend fun getCoins() : Flow<PagingData<Coin>> {
+        return Pager(
+            config = PagingConfig(pageSize = PAGE_SIZE, initialLoadSize = PAGE_SIZE , enablePlaceholders = true),
+            pagingSourceFactory = { CoinsPagingSource(api) }
+        ).flow
     }
+
+    companion object {
+        private const val PAGE_SIZE = 10
+    }
+
+
 }

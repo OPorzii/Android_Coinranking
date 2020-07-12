@@ -15,14 +15,13 @@ const val BASE_URL = "https://api.coinranking.com/v1/public/"
 interface ApiService {
 
     @GET("coins")
-    fun getCoinsList(@Query("offset") offset : Int, @Query("limit") limit : Int): CoinsResponse
+    suspend fun getCoinsList(@Query("offset") offset : Int, @Query("limit") limit : Int): CoinsResponse
 
     companion object {
         val instance: ApiService by lazy {
             val retrofit = Retrofit.Builder()
                 .baseUrl(BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
-                .addCallAdapterFactory(CoroutineCallAdapterFactory())
                 .build()
 
             retrofit.create(ApiService::class.java)

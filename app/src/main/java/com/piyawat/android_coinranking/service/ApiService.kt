@@ -15,7 +15,7 @@ const val BASE_URL = "https://api.coinranking.com/v1/public/"
 interface ApiService {
 
     @GET("coins")
-    fun getCoinsList(@Query("offset") offset : Int, @Query("limit") limit : Int): Deferred<Response<CoinsResponse>>
+    fun getCoinsList(@Query("offset") offset : Int, @Query("limit") limit : Int): CoinsResponse
 
     companion object {
         val instance: ApiService by lazy {

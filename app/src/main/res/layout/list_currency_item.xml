@@ -1,66 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="16dp">
 
-    <data>
 
-        <variable
-            name="coinItem"
-            type="com.piyawat.android_coinranking.model.Coin" />
+    <ImageView
+        android:id="@+id/currency_item_image"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginEnd="16dp"
+        android:background="#8F8F8F"/>
 
-    </data>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="16dp">
+        android:orientation="vertical"
+        app:layout_constraintStart_toEndOf="@id/currency_item_image"
+        app:layout_constraintTop_toTopOf="parent">
 
-
-        <ImageView
-            android:id="@+id/currency_item_image"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_marginEnd="16dp"
-            app:imageSvgUrl="@{coinItem.iconUrl}" />
-
-
-        <LinearLayout
-            android:layout_width="match_parent"
+        <TextView
+            android:id="@+id/currency_item_name"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            app:layout_constraintStart_toEndOf="@id/currency_item_image"
-            app:layout_constraintTop_toTopOf="parent">
+            android:layout_marginBottom="8dp"
+            android:ellipsize="end"
+            android:lineHeight="19sp"
+            android:maxLines="1"
+            android:textColor="#000000"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            tools:text="Bitcoin" />
 
-            <TextView
-                android:id="@+id/currency_item_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
-                android:ellipsize="end"
-                android:lineHeight="19sp"
-                android:maxLines="1"
-                android:text="@{coinItem.name}"
-                android:textColor="#000000"
-                android:textSize="16sp"
-                android:textStyle="bold"
-                tools:text="Bitcoin" />
-
-            <TextView
-                android:id="@+id/currency_item_desc"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:ellipsize="end"
-                android:lineHeight="16sp"
-                android:maxLines="3"
-                android:text='@{coinItem.description.replaceAll("\\&lt;.*?&gt;","")}'
-                android:textColor="#9E9E9E"
-                android:textSize="14sp"
-                tools:text="Bitcoin is the first decentralized digital currency that can be sent through the internet globally without using financial" />
-
-        </LinearLayout>
-
+        <TextView
+            android:id="@+id/currency_item_desc"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:lineHeight="16sp"
+            android:maxLines="3"
+            android:textColor="#9E9E9E"
+            android:textSize="14sp"
+            tools:text="Bitcoin is the first decentralized digital currency that can be sent through the internet globally without using financial" />
 
     </LinearLayout>
-</layout>
 
+
+</LinearLayout>

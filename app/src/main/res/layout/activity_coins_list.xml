@@ -1,95 +1,58 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FFF"
+    tools:context=".ui.CoinsListActivity">
 
-    <data>
-
-        <import type="android.view.View" />
-
-        <variable
-            name="viewModel"
-            type="com.piyawat.android_coinranking.ui.CoinsListViewModel" />
-    </data>
-
-    <androidx.coordinatorlayout.widget.CoordinatorLayout
+    <LinearLayout
+        android:id="@+id/search_frame"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="#FFF"
-        tools:context=".ui.CoinsListActivity">
+        android:layout_height="wrap_content"
+        android:paddingHorizontal="16dp"
+        android:paddingVertical="20dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
-        <com.google.android.material.appbar.AppBarLayout
-            android:id="@+id/search_edit_frame"
+        <SearchView
+            android:id="@+id/search_input"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:elevation="0dp">
+            android:layout_height="48dp"
+            android:background="@drawable/bg_input_rounded"
+            android:focusable="false"
+            android:iconifiedByDefault="false"
+            android:paddingStart="-4dp"
+            android:queryHint="ค้นหา"
+            app:theme="@style/SearchViewStyle" />
 
-            <androidx.appcompat.widget.Toolbar
-                android:id="@+id/toolbar"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="#FFF"
-                android:contentInsetStart="0dp"
-                android:contentInsetLeft="0dp"
-                android:contentInsetEnd="0dp"
-                android:contentInsetRight="0dp"
-                app:contentInsetEnd="0dp"
-                app:contentInsetLeft="0dp"
-                app:contentInsetRight="0dp"
-                app:contentInsetStart="0dp"
-                app:layout_scrollFlags="scroll|enterAlways">
+    </LinearLayout>
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
+    <View
+        android:id="@+id/head_divider"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@drawable/divider"
+        app:layout_constraintTop_toBottomOf="@id/search_frame" />
 
-                    <FrameLayout
-                        android:id="@+id/search_frame"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:paddingHorizontal="16dp"
-                        android:paddingVertical="20dp">
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swipe_layout"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/head_divider">
 
-                        <SearchView
-                            android:id="@+id/search_input"
-                            android:layout_width="match_parent"
-                            android:layout_height="48dp"
-                            android:background="@drawable/bg_input_rounded"
-                            android:focusable="false"
-                            android:iconifiedByDefault="false"
-                            android:paddingStart="-4dp"
-                            android:queryHint="ค้นหา"
-                            app:theme="@style/SearchViewStyle" />
-                    </FrameLayout>
-
-                    <View
-                        android:id="@+id/head_divider"
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:background="@drawable/divider" />
-                </LinearLayout>
-
-            </androidx.appcompat.widget.Toolbar>
-        </com.google.android.material.appbar.AppBarLayout>
-
-
-        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-            android:id="@+id/swipe_layout"
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/coins_list_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior">
+            android:clipToPadding="false"
+            tools:listitem="@layout/list_currency_item" />
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/coins_list_view"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:clipToPadding="false"
-                tools:listitem="@layout/list_currency_item" />
 
-        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
-    </androidx.coordinatorlayout.widget.CoordinatorLayout>
-
-</layout>
+</androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -4,9 +4,14 @@ import android.view.ViewGroup
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
+import com.piyawat.android_coinranking.R
 import com.piyawat.android_coinranking.model.Coin
 
 class CoinsListAdapter : PagingDataAdapter<Coin, ViewHolder>(REPO_COMPARATOR) {
+
+    enum class CoinItemView {
+        VIEW_NORMAL, VIEW_DIFF
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return CoinViewHolder.create(parent)
@@ -17,6 +22,12 @@ class CoinsListAdapter : PagingDataAdapter<Coin, ViewHolder>(REPO_COMPARATOR) {
         if (item != null) {
             (holder as CoinViewHolder).bind(item)
         }
+    }
+
+    override fun getItemViewType(position: Int): Int {
+        if ((position+1) % 5 == 0)
+            return R.layout.list_currency_item
+        return R.layout.list_currency_item_diff
     }
 
     companion object {

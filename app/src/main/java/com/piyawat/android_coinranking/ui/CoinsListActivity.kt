@@ -4,14 +4,18 @@ import android.os.Bundle
 import android.widget.SearchView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import androidx.paging.LoadState
+import androidx.paging.LoadStateAdapter
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.piyawat.android_coinranking.R
 import com.piyawat.android_coinranking.databinding.ActivityCoinsListBinding
+import com.piyawat.android_coinranking.ui.adapter.CoinLoadStateAdapter
 import com.piyawat.android_coinranking.ui.adapter.CoinsListAdapter
 import kotlinx.android.synthetic.main.activity_coins_list.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -43,11 +47,25 @@ class CoinsListActivity : AppCompatActivity() {
         viewModel = ViewModelProvider(this).get(CoinsListViewModel::class.java)
 
         setupUI()
-//        setupListener()
+        setupAdapter()
+        setupListener()
 //        setupObserver()
 
         // fetch first data set
         fetchCoinData()
+
+    }
+
+    private fun setupAdapter() {
+        binding.coinsListView.adapter = adapter.withLoadStateFooter(CoinLoadStateAdapter { adapter.retry() })
+        adapter.addLoadStateListener { loadState ->
+            // Only show the list if refresh succeeds.
+            binding.coinsListView.isVisible = loadState.source.refresh is LoadState.NotLoading
+            // Show loading spinner during initial load or refresh.
+            binding.swipeLayout.isRefreshing = loadState.source.refresh is LoadState.Loading
+            // Show the retry state if initial load or refresh fails.
+            binding.retryButton.isVisible = loadState.source.refresh is LoadState.Error
+        }
 
     }
 
@@ -71,40 +89,14 @@ class CoinsListActivity : AppCompatActivity() {
         binding.coinsListView.adapter = adapter
     }
 
-//    private fun setupListener(){
+    private fun setupListener(){
 
 
-//        search_input.setOnQueryTextListener(object : SearchView.OnQueryTextListener{
-//            override fun onQueryTextSubmit(query: String?): Boolean {
-//                return false
-//            }
-//
-//            override fun onQueryTextChange(newText: String?): Boolean {
-//                if(newText?.length == 1) adapter.saveFilterTempData()
-//                adapter.filter.filter(newText)
-//                return false
-//            }
-//
-//        })
+        binding.swipeLayout.setOnRefreshListener {
+            fetchCoinData()
+        }
 
-//        coins_list_view.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-//            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-//                if (dy > 0 && search_input.query.isEmpty()) {
-//                    val visibleItemCount = layoutManager.childCount
-//                    val pastVisibleItem = layoutManager.findFirstCompletelyVisibleItemPosition()
-//                    val total = adapter.itemCount
-//                    if (!isLoadMore) {
-//                        if ((visibleItemCount + pastVisibleItem) >= total) {
-//                            isLoadMore = true
-//                            val nextPage = ((page++) * limit)
-//                            viewModel.fetchCoinsList(nextPage, limit)
-//                        }
-//                    }
-//                    super.onScrolled(recyclerView, dx, dy)
-//                }
-//            }
-//        })
-//    }
+    }
 
 //    private fun setupObserver() {
 //        viewModel.coinsList.observe(this, Observer {

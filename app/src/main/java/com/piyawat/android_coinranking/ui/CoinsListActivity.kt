@@ -86,7 +86,6 @@ class CoinsListActivity : AppCompatActivity() {
         binding.coinsListView.addItemDecoration(itemDecorator)
         binding.coinsListView.layoutManager = layoutManager
         binding.coinsListView.setHasFixedSize(true)
-        binding.coinsListView.adapter = adapter
     }
 
     private fun setupListener(){

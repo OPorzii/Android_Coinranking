@@ -1,19 +1,16 @@
 package com.piyawat.android_coinranking.ui
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.paging.PagedList
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.piyawat.android_coinranking.model.Coin
 import com.piyawat.android_coinranking.repository.CoinsRepository
 import com.piyawat.android_coinranking.service.ApiService
-import com.piyawat.android_coinranking.utils.Coroutines
-import kotlinx.coroutines.Job
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 
+@ExperimentalCoroutinesApi
 class CoinsListViewModel : ViewModel(){
 
     private val repository = CoinsRepository(ApiService.instance)

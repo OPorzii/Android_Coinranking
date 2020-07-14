@@ -1,5 +1,6 @@
 package com.piyawat.android_coinranking.ui.adapter
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.view.isVisible
@@ -13,7 +14,10 @@ class CoinLoadStateViewHolder(private val binding: LoadStateFooterBinding, retry
 
 
     init {
-        binding.retryButton.setOnClickListener { retry.invoke() }
+        binding.retryButton.setOnClickListener {
+            Log.d("ADAPTER_RELOAD", "RETRY CLICKED")
+            retry.invoke()
+        }
     }
 
     fun bind(loadState: LoadState) {

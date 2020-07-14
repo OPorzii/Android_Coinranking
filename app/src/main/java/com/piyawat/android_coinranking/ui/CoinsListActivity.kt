@@ -31,12 +31,8 @@ class CoinsListActivity : AppCompatActivity() {
     private lateinit var binding: ActivityCoinsListBinding
     private var adapter = CoinsListAdapter()
     private var fetchJob: Job? = null
-
-
     private lateinit var layoutManager : LinearLayoutManager
-    private var isLoadMore = false
-    private var page = 1
-    private val limit = 10
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -54,6 +50,8 @@ class CoinsListActivity : AppCompatActivity() {
 
         // fetch first data set
         fetchCoinData()
+
+        binding.retryButton.setOnClickListener{ adapter.retry() }
 
     }
 
@@ -103,7 +101,6 @@ class CoinsListActivity : AppCompatActivity() {
     }
 
     private fun setupListener(){
-
 
         binding.swipeLayout.setOnRefreshListener {
             fetchCoinData()

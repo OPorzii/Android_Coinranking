@@ -18,11 +18,11 @@ class CoinDiffViewHolder(private val binding: ListCurrencyItemDiffBinding) : Rec
     }
 
     companion object {
-        fun create(parent: ViewGroup): CoinViewHolder {
+        fun create(parent: ViewGroup): CoinDiffViewHolder {
             val view = LayoutInflater.from(parent.context)
                 .inflate(R.layout.list_currency_item_diff, parent, false)
-            val binding = ListCurrencyItemBinding.bind(view)
-            return CoinViewHolder(binding)
+            val binding = ListCurrencyItemDiffBinding.bind(view)
+            return CoinDiffViewHolder(binding)
         }
     }
 }

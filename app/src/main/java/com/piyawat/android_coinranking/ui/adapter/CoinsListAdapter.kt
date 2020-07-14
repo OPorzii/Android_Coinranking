@@ -7,37 +7,43 @@ import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.piyawat.android_coinranking.R
 import com.piyawat.android_coinranking.model.Coin
 
-class CoinsListAdapter : PagingDataAdapter<Coin, ViewHolder>(REPO_COMPARATOR) {
-
-    enum class CoinItemView {
-        VIEW_NORMAL, VIEW_DIFF
-    }
+class CoinsListAdapter : PagingDataAdapter<Coin, ViewHolder>(VIEW_COMPARATOR) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        return CoinViewHolder.create(parent)
+        return when(viewType){
+            VIEW_NORMAL -> CoinViewHolder.create(parent)
+            VIEW_DIFF -> CoinDiffViewHolder.create(parent)
+            else -> throw IllegalArgumentException("Error view type")
+        }
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = getItem(position)
-        if (item != null) {
-            (holder as CoinViewHolder).bind(item)
+        item?.let {
+            when(holder){
+                is CoinViewHolder -> (holder as CoinViewHolder).bind(item)
+                is CoinDiffViewHolder -> (holder as CoinDiffViewHolder).bind(item)
+            }
         }
     }
 
     override fun getItemViewType(position: Int): Int {
         if ((position+1) % 5 == 0)
-            return R.layout.list_currency_item
-        return R.layout.list_currency_item_diff
+            return VIEW_DIFF
+        return VIEW_NORMAL
     }
 
     companion object {
-        private val REPO_COMPARATOR = object : DiffUtil.ItemCallback<Coin>() {
+        private val VIEW_COMPARATOR = object : DiffUtil.ItemCallback<Coin>() {
             override fun areItemsTheSame(oldItem: Coin, newItem: Coin): Boolean =
                 oldItem.id == newItem.id
 
             override fun areContentsTheSame(oldItem: Coin, newItem: Coin): Boolean =
                 oldItem == newItem
         }
+
+        private const val VIEW_NORMAL = 0
+        private const val VIEW_DIFF = 1
     }
 
 }

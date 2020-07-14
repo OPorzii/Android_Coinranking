@@ -16,7 +16,6 @@
             android:ellipsize="end"
             android:lineHeight="19sp"
             android:maxLines="1"
-            android:text="@{coinItem.name}"
             android:textColor="#000000"
             android:textSize="16sp"
             android:textStyle="bold"

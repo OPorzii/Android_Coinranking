@@ -11,9 +11,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 
 @ExperimentalCoroutinesApi
-class CoinsListViewModel : ViewModel(){
-
-    private val repository = CoinsRepository(ApiService.instance)
+class CoinsListViewModel(private val repository: CoinsRepository) : ViewModel(){
 
     private var coinsListResult : Flow<PagingData<Coin>>? = null
 

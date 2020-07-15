@@ -14,9 +14,11 @@ class CoinLoadStateViewHolder(private val binding: LoadStateFooterBinding, retry
 
 
     init {
-        binding.retryButton.setOnClickListener {
-            Log.d("ADAPTER_RELOAD", "RETRY CLICKED")
-            retry.invoke()
+        binding.retryButton.also {
+            it.setOnClickListener {
+                Log.d("ADAPTER_RELOAD", "RETRY CLICKED")
+                retry.invoke()
+            }
         }
     }
 

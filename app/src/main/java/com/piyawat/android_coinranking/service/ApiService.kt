@@ -10,14 +10,13 @@ import retrofit2.http.GET
 import retrofit2.http.Query
 
 
-const val BASE_URL = "https://api.coinranking.com/v1/public/"
-
 interface ApiService {
 
     @GET("coins")
     suspend fun getCoinsList(@Query("offset") offset : Int, @Query("limit") limit : Int): CoinsResponse
 
     companion object {
+        private const val BASE_URL = "https://api.coinranking.com/v1/public/"
         val instance: ApiService by lazy {
             val logger = HttpLoggingInterceptor()
             logger.level = Level.BASIC

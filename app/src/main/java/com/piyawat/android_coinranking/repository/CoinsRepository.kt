@@ -5,11 +5,10 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import com.piyawat.android_coinranking.model.Coin
-import com.piyawat.android_coinranking.repository.base.BaseRepository
 import com.piyawat.android_coinranking.service.ApiService
 import kotlinx.coroutines.flow.Flow
 
-class CoinsRepository(private val api : ApiService) : BaseRepository() {
+class CoinsRepository(private val api : ApiService) {
 
     suspend fun getCoins() : Flow<PagingData<Coin>> {
         return Pager(

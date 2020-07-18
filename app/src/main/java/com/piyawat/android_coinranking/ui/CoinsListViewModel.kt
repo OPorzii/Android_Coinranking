@@ -1,5 +1,6 @@
 package com.piyawat.android_coinranking.ui
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
@@ -17,8 +18,11 @@ class CoinsListViewModel(private val repository: CoinsRepository) : ViewModel(){
 
     suspend fun fetchCoinsList() : Flow<PagingData<Coin>>?{
         val result : Flow<PagingData<Coin>> = repository.getCoins().cachedIn(viewModelScope)
-
         return result
+    }
+
+    fun testViewMo(){
+        Log.d("VIEW_MODEL", "OK")
     }
 
 }

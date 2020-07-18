@@ -5,7 +5,6 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.DividerItemDecoration
@@ -14,16 +13,16 @@ import com.piyawat.android_coinranking.R
 import com.piyawat.android_coinranking.databinding.ActivityCoinsListBinding
 import com.piyawat.android_coinranking.ui.adapter.CoinLoadStateAdapter
 import com.piyawat.android_coinranking.ui.adapter.CoinsListAdapter
-import com.piyawat.android_coinranking.utils.Injection
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 @ExperimentalCoroutinesApi
 class CoinsListActivity : AppCompatActivity() {
 
-    private lateinit var viewModel: CoinsListViewModel
+    private val viewModel : CoinsListViewModel by viewModel()
     private lateinit var binding: ActivityCoinsListBinding
     private var adapter = CoinsListAdapter()
     private var fetchJob: Job? = null
@@ -36,9 +35,6 @@ class CoinsListActivity : AppCompatActivity() {
         val view = binding.root
         setContentView(view)
 
-        // get the view model
-        viewModel = ViewModelProvider(this, Injection.provideViewModelFactory()).get(CoinsListViewModel::class.java)
-
         setupUI()
         setupAdapter()
         setupListener()
@@ -46,6 +42,8 @@ class CoinsListActivity : AppCompatActivity() {
 
         // fetch first data set
         fetchCoinData()
+
+
 
         binding.retryButton.setOnClickListener{ adapter.retry() }
 

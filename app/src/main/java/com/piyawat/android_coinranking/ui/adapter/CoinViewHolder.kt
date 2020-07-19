@@ -30,7 +30,10 @@ class CoinViewHolder(private val binding: ListCurrencyItemBinding) : RecyclerVie
     private fun showCoinData(coin : Coin) {
             this.coin = coin
             binding.currencyItemName.text = coin.name
-            binding.currencyItemDesc.text = coin.description
+            coin.description?.let{
+                binding.currencyItemDesc.text = it.replace("<[^>]*>".toRegex(), "")
+            }
+
             GlideToVectorYou.init().with(itemView.context).load(Uri.parse(coin.iconUrl), binding.currencyItemImage)
     }
 

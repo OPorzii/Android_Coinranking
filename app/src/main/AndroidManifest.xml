@@ -14,8 +14,7 @@
         android:supportsRtl="true"
         android:name=".MainApplication"
         android:theme="@style/AppTheme">
-        <activity android:name=".ui.CoinsListActivity" android:theme="@style/NoActionBar"/>
-        <activity android:name=".MainActivity">
+        <activity android:name=".ui.CoinsListActivity" android:theme="@style/NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />

@@ -10,10 +10,10 @@ import kotlinx.coroutines.flow.Flow
 
 class CoinsRepository(private val api : ApiService) {
 
-    suspend fun getCoins() : Flow<PagingData<Coin>> {
+    suspend fun getCoins(query: String?) : Flow<PagingData<Coin>> {
         return Pager(
             config = PagingConfig(pageSize = PAGE_SIZE, initialLoadSize = PAGE_SIZE , enablePlaceholders = true),
-            pagingSourceFactory = { CoinsPagingSource(api) }
+            pagingSourceFactory = { CoinsPagingSource(api, query) }
         ).flow
     }
 

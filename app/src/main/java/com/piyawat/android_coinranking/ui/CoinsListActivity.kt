@@ -1,11 +1,16 @@
 package com.piyawat.android_coinranking.ui
 
 import android.os.Bundle
+import android.os.Handler
+import android.util.Log
+import android.view.KeyEvent
+import android.widget.SearchView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
+import androidx.paging.ExperimentalPagingApi
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -27,6 +32,7 @@ class CoinsListActivity : AppCompatActivity() {
     private var adapter = CoinsListAdapter()
     private var fetchJob: Job? = null
     private lateinit var layoutManager : LinearLayoutManager
+    private var handler = Handler()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -41,7 +47,7 @@ class CoinsListActivity : AppCompatActivity() {
 //        setupObserver()
 
         // fetch first data set
-        fetchCoinData()
+        fetchCoinData(null)
 
 
 
@@ -75,10 +81,10 @@ class CoinsListActivity : AppCompatActivity() {
 
     }
 
-    private fun fetchCoinData() {
+    private fun fetchCoinData(query : String?) {
         fetchJob?.cancel()
         fetchJob = lifecycleScope.launch {
-            viewModel.fetchCoinsList()?.collectLatest {
+            viewModel.fetchCoinsList(query)?.collectLatest {
                 adapter.submitData(it)
             }
         }
@@ -97,9 +103,33 @@ class CoinsListActivity : AppCompatActivity() {
     private fun setupListener(){
 
         binding.swipeLayout.setOnRefreshListener {
-            fetchCoinData()
+            searchCoinList()
         }
 
+        binding.searchInput.setOnQueryTextListener(object : SearchView.OnQueryTextListener{
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                searchCoinList()
+                return false
+            }
+            override fun onQueryTextChange(newText: String?): Boolean {
+                handler.apply {
+                    removeCallbacksAndMessages(null)
+                }.postDelayed({
+                    searchCoinList()
+                }, 1000)
+                return false
+            }
+        })
+
+
+    }
+
+    private fun searchCoinList() {
+        val queryText = binding.searchInput.query.toString().trim()
+        fetchCoinData(if(queryText.isEmpty()) null else queryText )
+        Log.d("TEST_TYPING", binding.searchInput.query.toString())
+
+//        Toast.makeText(this, binding.searchInput.query.toString(), Toast.LENGTH_SHORT).show()
     }
 
 //    private fun setupObserver() {
@@ -119,7 +149,7 @@ class CoinsListActivity : AppCompatActivity() {
         if(layoutManager.findFirstCompletelyVisibleItemPosition()==0){
             super.onBackPressed()
         } else {
-            binding.coinsListView.smoothScrollToPosition(0)
+            binding.coinsListView.scrollToPosition(0)
         }
 
     }

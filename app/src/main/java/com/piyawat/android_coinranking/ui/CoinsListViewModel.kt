@@ -14,15 +14,10 @@ import kotlinx.coroutines.flow.Flow
 @ExperimentalCoroutinesApi
 class CoinsListViewModel(private val repository: CoinsRepository) : ViewModel(){
 
-    private var coinsListResult : Flow<PagingData<Coin>>? = null
-
-    suspend fun fetchCoinsList() : Flow<PagingData<Coin>>?{
-        val result : Flow<PagingData<Coin>> = repository.getCoins().cachedIn(viewModelScope)
+    suspend fun fetchCoinsList(query : String?) : Flow<PagingData<Coin>>{
+        val result : Flow<PagingData<Coin>> = repository.getCoins(query).cachedIn(viewModelScope)
         return result
     }
 
-    fun testViewMo(){
-        Log.d("VIEW_MODEL", "OK")
-    }
 
 }
